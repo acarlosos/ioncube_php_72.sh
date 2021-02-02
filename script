@@ -1,0 +1,16 @@
+wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+tar zxvf ioncube_loaders_lin_x86-64.tar.gz
+PHP_CONFD="/etc/php/7.2/fpm/conf.d"
+PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+PHP_EXT_DIR=$(php-config --extension-dir)
+cp "ioncube/ioncube_loader_lin_${PHP_VERSION}.so" $PHP_EXT_DIR
+echo "zend_extension = ${PHP_EXT_DIR}/ioncube_loader_lin_${PHP_VERSION}.so" > "${PHP_CONFD}/00-ioncube.ini"
+PHP_CONFD="/etc/php/7.2/cli/conf.d"
+PHP_VERSION=$(php -r "echo PHP_MAJOR_VERSION.'.'.PHP_MINOR_VERSION;")
+PHP_EXT_DIR=$(php-config --extension-dir)
+cp "ioncube/ioncube_loader_lin_${PHP_VERSION}.so" $PHP_EXT_DIR
+echo "zend_extension = ${PHP_EXT_DIR}/ioncube_loader_lin_${PHP_VERSION}.so" > "${PHP_CONFD}/00-ioncube.ini"
+rm -rf ./ioncube
+rm ioncube_loaders_lin_x86-64.tar.gz
+service php7.2-fpm restart
+service nginx restart
